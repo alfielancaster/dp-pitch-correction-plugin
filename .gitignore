@@ -1,0 +1,22 @@
+# CMake generated files
+/build/
+/cmake-build-*/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Compiled plugins
+*.exe
+*.dll
+*.pdb
+*.vst3
+
+# Generated JUCE / Projucer files
+/Builds/
+/JuceLibraryCode/
+
+# Operating system
+.DS_Store
+Thumbs.db
