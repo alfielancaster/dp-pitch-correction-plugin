@@ -8,6 +8,9 @@ A simple reference for continuing development of **PitchCorrectionPlugin**, a JU
 
 ---
 
+## Code Line to build and run in vscode
+cmake --build build --config Debug --target PitchCorrectionPlugin_Standalone; if ($LASTEXITCODE -eq 0) { .\build\PitchCorrectionPlugin_artefacts\Debug\Standalone\PitchCorrectionPlugin.exe }
+
 ## 1. Open your project
 
 1. Open **VS Code** → **File → Open Folder** → select `PitchCorrectionPlugin`.
