@@ -12,15 +12,15 @@ int PitchDetector::getWindowSize() const
     return windowSize;
 }
 
-// use of: "https://dsp-workshop.nl/topics/pitch-detection/" & "https://dsp.gundy.dev/audio-coding/pitch-detection/"
-// throughout to understand method and its uses in pitch detection.
-
 // to detect pitch using autocorrelation by comparing audio samplyes at different lags.
 float PitchDetector::detectPitch(const float *samples, double sampleRate) const
 {
     // to check for invalid inputs.
     if (samples == nullptr || windowSize < 4 || sampleRate <= 0.0 || minFrequency <= 0.0f || maxFrequency <= minFrequency)
         return 0.0f;
+
+    // use of: "https://dsp-workshop.nl/topics/pitch-detection/"
+    // to understand using RMS energy to detect silence not suitable for pitch detection.
 
     // to calculate signal energy.
     double energy = 0.0;
@@ -53,6 +53,9 @@ float PitchDetector::detectPitch(const float *samples, double sampleRate) const
     double twoLagsAgo = 0.0; // storing these values to help find a peak.
     double oneLagAgo = 0.0;
 
+    // use of: "https://dsp.gundy.dev/audio-coding/pitch-detection/"
+    // to understand autocorrelation by comparing audio samples at different lags to find the peak. 
+
     for (int lag = minLag; lag <= maxLag; ++lag)
     {
         double correlation = 0.0;
@@ -65,8 +68,11 @@ float PitchDetector::detectPitch(const float *samples, double sampleRate) const
             correlation += firstSample * delayedSample;
         }
 
+        // use of: "https://wooters.github.io/miniDSP/pitch-detection.html" & "https://lebedev.ai/writing/pitch-detection-auto-calibration/"
+        // to identify local correlation peaks and using thresholds to detect strong peaks. 
+
         // this finds the first strong peak and using 0.3 threshold for testing.
-        if (lag >= minLag + 2 &&
+        if (lag >= minLag + 2 && // calculating the formula use later in theory. 
             oneLagAgo > twoLagsAgo &&
             oneLagAgo >= correlation &&
             oneLagAgo > energy * 0.3)
