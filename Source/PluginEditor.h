@@ -1,20 +1,9 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
-//==============================================================================
-/**
-*/
-class PitchCorrectionPluginAudioProcessorEditor  : public juce::AudioProcessorEditor
+class PitchCorrectionPluginAudioProcessorEditor  : public juce::AudioProcessorEditor , private juce::Timer
 {
 public:
     PitchCorrectionPluginAudioProcessorEditor (PitchCorrectionPluginAudioProcessor&);
@@ -25,8 +14,10 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    juce::Label frequencyLabel; // to store label used to display detected frequency.
+
+    void timerCallback() override; // to update the frequency display when the timer runs. 
+
     PitchCorrectionPluginAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PitchCorrectionPluginAudioProcessorEditor)

@@ -1,40 +1,51 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+// use of: "https://docs.juce.com/master/classjuce_1_1Timer.html"
+// used between files to understand using timers to update plugin display. 
+
 //==============================================================================
-PitchCorrectionPluginAudioProcessorEditor::PitchCorrectionPluginAudioProcessorEditor (PitchCorrectionPluginAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+PitchCorrectionPluginAudioProcessorEditor::PitchCorrectionPluginAudioProcessorEditor(PitchCorrectionPluginAudioProcessor &p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    frequencyLabel.setText("No pitch detected", juce::dontSendNotification); // to set up label display
+    frequencyLabel.setJustificationType(juce::Justification::centred);
+    frequencyLabel.setFont(juce::FontOptions(24.0f));
+
+    addAndMakeVisible(frequencyLabel);
+
+    startTimerHz(10); // used to understand updating the plugin display.
+    setSize(400, 200);
 }
 
 PitchCorrectionPluginAudioProcessorEditor::~PitchCorrectionPluginAudioProcessorEditor()
 {
 }
 
-//==============================================================================
-void PitchCorrectionPluginAudioProcessorEditor::paint (juce::Graphics& g)
+void PitchCorrectionPluginAudioProcessorEditor::paint(juce::Graphics &g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setColour(juce::Colours::white);
+    g.setFont(juce::FontOptions(15.0f));
+    g.drawFittedText("Pitch Detector Initial Prototype", 0, 20, getWidth(), 30, juce::Justification::centred, 1);
 }
 
 void PitchCorrectionPluginAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    frequencyLabel.setBounds(20, 65, getWidth() - 40, 90); // to be displayed below the title text and centered. 
+}
+
+void PitchCorrectionPluginAudioProcessorEditor::timerCallback()
+{
+    float frequency = audioProcessor.getDetectedFrequency(); // to get the latest detected frequency.
+
+    if (frequency > 0.0f)  
+    {
+        frequencyLabel.setText("Detected Frequency: " + juce::String(frequency, 1) + " Hz", juce::dontSendNotification);
+    }
+    else
+    {
+        frequencyLabel.setText("No pitch detected", juce::dontSendNotification);
+    }
 }
