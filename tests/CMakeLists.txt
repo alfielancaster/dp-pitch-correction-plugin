@@ -8,3 +8,4 @@ add_executable(PitchDetectorTests
 )
 
 target_compile_features(PitchDetectorTests PRIVATE cxx_std_17)
+

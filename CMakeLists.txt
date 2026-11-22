@@ -23,6 +23,8 @@ target_sources(PitchCorrectionPlugin PRIVATE
     Source/PluginProcessor.h
     Source/PluginEditor.cpp
     Source/PluginEditor.h
+    Source/PitchDetector.cpp
+    Source/PitchDetector.h
 )
 
 target_compile_definitions(PitchCorrectionPlugin PUBLIC
