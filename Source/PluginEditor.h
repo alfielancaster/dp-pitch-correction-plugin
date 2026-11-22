@@ -14,9 +14,9 @@ public:
     void resized() override;
 
 private:
-    juce::Label frequencyLabel;
+    juce::Label frequencyLabel; // to store label used to display detected frequency.
 
-    void timerCallback() override;
+    void timerCallback() override; // to update the frequency display when the timer runs. 
 
     PitchCorrectionPluginAudioProcessor& audioProcessor;
 
